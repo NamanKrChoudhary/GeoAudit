@@ -1,0 +1,234 @@
+/* =========================================
+   GLOBAL SCROLL BEHAVIOR
+   ========================================= */
+html {
+  scroll-behavior: smooth;
+  /* Prevents the floating navbar from covering section titles */
+  scroll-padding-top: 100px;
+}
+
+/* Global Dot Motion Animation */
+@keyframes moveBackgroundLeft {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -80px 0;
+  }
+}
+
+/* =========================================
+   NAVBAR WRAPPER & LAYOUT
+   ========================================= */
+.navbar-wrapper {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 70px;
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar-wrapper.scrolled {
+  width: 95%;
+  top: 10px;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 30px; /* Aligns with the dropdown left position */
+}
+
+/* --- LOGO & BUTTONS --- */
+.logo-text {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-color);
+  letter-spacing: 0.5px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.menu-trigger.active {
+  color: #d1ff42;
+  transform: rotate(90deg); /* Smooth flip to 'X' */
+}
+
+/* =========================================
+   THE SIDE-ALIGNED ULTRA-FROST DROPDOWN
+   ========================================= */
+.nav-dropdown-wrapper {
+  position: absolute;
+  top: calc(100% + 15px);
+  left: 30px; /* Perfectly aligned under the hamburger icon */
+  width: auto;
+  min-width: 300px; /* Premium width */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px);
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.nav-dropdown-wrapper.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.menu-bubbles-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* =========================================
+   CAPSULE & LINK STYLING
+   ========================================= */
+
+/* The Row Animation Container */
+.nav-bubble-row {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-dropdown-wrapper.open .nav-bubble-row {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* The Glass Capsule (Wrapper) */
+.bubble-link {
+  height: 56px;
+  width: 100%;
+  display: flex;
+  /* CRITICAL: Padding must be 0 here so the <a> tag fills the space */
+  padding: 0 !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1.2px solid rgba(255, 255, 255, 0.4) !important;
+  overflow: hidden; /* Ensures the hover fill stays inside border radius */
+}
+
+/* The Actual Clickable Link (Fills the Capsule) */
+.bubble-link a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 30px; /* Padding moved inside the link for clickability */
+  text-decoration: none;
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  white-space: nowrap;
+  transition:
+    color 0.3s ease,
+    letter-spacing 0.3s ease;
+}
+
+/* =========================================
+   HOVER EFFECTS
+   ========================================= */
+
+/* When hovering the row, animate the capsule */
+.nav-bubble-row:hover .bubble-link {
+  border-color: #d1ff42 !important;
+  background: rgba(209, 255, 66, 0.15) !important; /* Lime Tint */
+  transform: translateX(10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* When hovering the row, animate the text */
+.nav-bubble-row:hover a {
+  color: #d1ff42 !important;
+  letter-spacing: 3.5px; /* Text expands slightly */
+}
+
+/* =========================================
+   DARK MODE OVERRIDES
+   ========================================= */
+[data-theme="dark"] .navbar-glass {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+[data-theme="dark"] .bubble-link {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Subtle dot drift background behind dropdown (Optional Flair) */
+.nav-dropdown-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  background-image: radial-gradient(
+    rgba(209, 255, 66, 0.08) 1px,
+    transparent 1px
+  );
+  background-size: 25px 25px;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  animation: moveBackgroundLeft 9s linear infinite;
+}
+
+.nav-dropdown-wrapper.open::after {
+  opacity: 1;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+  .navbar-wrapper {
+    width: 95%;
+    height: 60px;
+  }
+
+  /* Adjust left alignment for mobile padding */
+  .nav-dropdown-wrapper {
+    left: 20px;
+    min-width: 260px;
+  }
+
+  .bubble-link {
+    height: 50px;
+  }
+  .bubble-link a {
+    padding: 0 20px;
+  }
+
+  .logo-text {
+    font-size: 1.4rem;
+  }
+}

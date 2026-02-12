@@ -1,0 +1,427 @@
+/* Dashboard.css */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap");
+
+:root {
+  /* Palette */
+  --lime: #d1ff42;
+  --lime-dim: #b8e62b;
+  --slate: #0f172a; /* Darker, richer slate */
+  --slate-light: #475569;
+  --slate-lighter: #e2e8f0;
+  --white: #ffffff;
+  --bg-tint: #f1f5f9;
+
+  /* Semantic Colors */
+  --error: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+
+  /* Shadows & Borders */
+  --hard-shadow: 5px 5px 0px var(--slate);
+  --hard-shadow-sm: 3px 3px 0px var(--slate);
+  --border-thick: 2px solid var(--slate);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  color: var(--slate);
+  background-color: var(--bg-tint);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- 1. The Matrix / Tech Background --- */
+.matrix-bg {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background-color: #f8fafc;
+
+  /* A cleaner, technical dot grid */
+  background-image:
+    radial-gradient(var(--slate-light) 0.5px, transparent 0.5px),
+    linear-gradient(to right, rgba(30, 41, 59, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(30, 41, 59, 0.03) 1px, transparent 1px);
+
+  background-size:
+    24px 24px,
+    48px 48px,
+    48px 48px;
+  background-position:
+    0 0,
+    0 0,
+    0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- 2. Navbar (Fixed Top) --- */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+}
+
+/* --- 3. Main Layout Container --- */
+.dashboard-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1); /* "Expo" ease for smoothness */
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+/* STATE: INITIAL (The Hero Section) */
+.dashboard-container.initial {
+  justify-content: center; /* Vertically center everything */
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  padding-top: 0;
+}
+
+/* STATE: SEARCHED (The Dashboard View) */
+.dashboard-container.searched {
+  justify-content: flex-start;
+  align-items: center;
+  height: auto;
+  padding-top: 100px; /* Space for the navbar + fixed search bar */
+}
+
+/* --- 4. Hero Content (Text) --- */
+.hero-content {
+  text-align: center;
+  margin-bottom: 40px;
+  transition: all 0.5s ease;
+  z-index: 10;
+}
+
+/* When hidden, it slides up and fades out */
+.hero-content.hidden {
+  opacity: 0;
+  transform: translateY(-40px) scale(0.95);
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+h1.main-heading {
+  font-size: 4.5rem; /* Massive text */
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  color: var(--slate);
+  margin: 0 0 1rem 0;
+}
+
+p.sub-heading {
+  font-size: 1.25rem;
+  color: var(--slate-light);
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- 5. The Command Bar (Search) --- */
+.search-wrapper {
+  background: var(--white);
+  border: var(--border-thick);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  width: 100%;
+  max-width: 850px;
+  box-shadow: var(--hard-shadow);
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 100;
+}
+
+/* Transformation when searched: Stick to top */
+.dashboard-container.searched .search-wrapper {
+  transform: translateY(0);
+  max-width: 1400px; /* Get wider */
+  margin-bottom: 20px;
+}
+
+.search-input-group {
+  display: flex;
+  flex: 1;
+  gap: 0; /* Removing gap for connected look */
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  margin-right: 12px;
+  overflow: hidden; /* For corner radius */
+}
+
+.input-field {
+  border: none;
+  padding: 16px 20px;
+  font-size: 1.05rem;
+  outline: none;
+  background: transparent;
+  color: var(--slate);
+  font-family: "Inter", sans-serif;
+  transition: background 0.2s;
+}
+
+.input-field:focus {
+  background: #ffffff;
+}
+
+.input-name {
+  flex: 3;
+  border-right: 1px solid #e2e8f0;
+}
+
+.input-select {
+  flex: 1;
+  cursor: pointer;
+  background-color: #f1f5f9;
+  font-weight: 600;
+}
+
+/* --- Buttons --- */
+.btn {
+  padding: 14px 28px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.1s ease;
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  background: var(--slate);
+  color: var(--white);
+  border: 2px solid var(--slate);
+  margin-right: 10px;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-audit {
+  background: var(--lime);
+  color: var(--slate);
+  border: 2px solid var(--slate);
+  box-shadow: 4px 4px 0 var(--slate); /* The retro hard shadow */
+}
+
+.btn-audit:hover {
+  background: var(--lime-dim);
+}
+
+/* --- 6. Results Container (The Main Content) --- */
+.results-container {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  gap: 24px;
+  opacity: 0;
+  animation: slideUpFade 0.8s 0.3s cubic-bezier(0.19, 1, 0.22, 1) forwards; /* Delay ensures search bar moves first */
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Map View Styling --- */
+.map-view {
+  flex: 2; /* 66% width approx */
+  background: var(--white);
+  border-radius: 16px;
+  height: 650px; /* Fixed height for consistency */
+  border: var(--border-thick);
+  box-shadow: var(--hard-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.map-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #334155;
+  position: relative;
+}
+
+.map-overlay-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Let clicks pass through to map */
+}
+
+/* --- Sidebar Styling --- */
+.sidebar-view {
+  flex: 1; /* 33% width */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 650px;
+}
+
+.stat-card {
+  background: var(--white);
+  border: var(--border-thick);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--hard-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--slate-light);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--slate);
+  line-height: 1;
+}
+
+/* --- Owner Grid Layout --- */
+.owner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  width: 100%;
+}
+
+.plot-card {
+  background: var(--white);
+  border: var(--border-thick);
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  position: relative;
+}
+
+.plot-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--hard-shadow);
+}
+
+/* --- Badges & Utilities --- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: -0.5px;
+}
+.badge-red {
+  background: #fecaca;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}
+.badge-green {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+.badge-lime {
+  background: var(--lime);
+  color: var(--slate);
+  border: 1px solid var(--slate);
+}
+
+/* --- Footer --- */
+footer {
+  width: 100%;
+  text-align: center;
+  padding: 40px 0;
+  margin-top: auto;
+  border-top: 1px solid #e2e8f0;
+  color: var(--slate-light);
+  font-size: 0.9rem;
+}
+
+/* --- Animations --- */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  h1.main-heading {
+    font-size: 2.5rem;
+  }
+  .dashboard-container.searched {
+    padding-top: 140px;
+  }
+  .results-container {
+    flex-direction: column;
+  }
+  .map-view,
+  .sidebar-view {
+    height: auto;
+    min-height: 400px;
+  }
+  nav {
+    padding: 0 20px;
+  }
+}

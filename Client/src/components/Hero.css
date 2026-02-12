@@ -1,0 +1,327 @@
+/* --- HERO CONTAINER & GRID --- */
+.hero-container {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  padding-top: 80px;
+
+  background-color: #ffffff;
+  background-image:
+    linear-gradient(rgba(136, 136, 136, 0.15) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(136, 136, 136, 0.15) 2px, transparent 2px);
+  background-size: 80px 80px;
+  box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.1);
+
+  animation: gridMove 2s linear infinite;
+  backface-visibility: hidden;
+  will-change: background-position;
+}
+
+@keyframes gridMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 80px 0;
+  }
+}
+
+/* --- LOAD-IN ANIMATIONS --- */
+.animate-item {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+.delay-1 {
+  animation-delay: 0.2s;
+}
+.delay-2 {
+  animation-delay: 0.5s;
+}
+.delay-3 {
+  animation-delay: 0.8s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- CANVAS --- */
+.hero-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  padding: 0 20px;
+}
+
+/* --- TYPOGRAPHY --- */
+.title-wrapper {
+  position: relative;
+  display: inline-block; /* Hugs the text width exactly */
+  margin-bottom: 2rem;
+  line-height: 1; /* Removes vertical gap */
+}
+
+.hero-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 6rem;
+  color: #1a1a1a;
+  margin: 0;
+  font-weight: 400;
+  letter-spacing: -2px;
+  cursor: default;
+  position: relative;
+  z-index: 2; /* Sits ON TOP of the paint */
+  display: block; /* Ensures it fills the wrapper */
+}
+
+/* HOVER EFFECT */
+.hero-title.rainbow-hover::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+
+  background: linear-gradient(
+    135deg,
+    #3e5a70 0%,
+    #4a90e2 25%,
+    #d1ff42 50%,
+    #4a90e2 75%,
+    #3e5a70 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: liquidShine 4s linear infinite;
+
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.hero-title.rainbow-hover:hover::before {
+  opacity: 1;
+}
+
+@keyframes liquidShine {
+  to {
+    background-position: 300% center;
+  }
+}
+
+.cursor {
+  font-weight: 100;
+  color: #3e5a70;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* --- BRUSH STROKE (The Fix) --- */
+/* Define the Linear Wipe Animation */
+@keyframes brushWipe {
+  from {
+    /* Clip the element so it's hidden (clipped 100% from the right) */
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.5; /* Start slightly transparent */
+  }
+  to {
+    /* Unclip it fully */
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.brush-underline {
+  position: absolute;
+  /* Positioned closer to the baseline for the thinner look */
+  bottom: 1rem;
+  left: 0;
+  width: 100%;
+  height: 30px; /* Reduced height for the thinner SVG */
+
+  /* New, Thin, Graceful SVG */
+  /* A single, elegant curved path with rounded ends */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 25' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 15 Q 100 0, 200 12 T 395 10' stroke='%23d1ff42' stroke-width='5' stroke-linecap='round' stroke-linejoin='round' opacity='0.9' /%3E%3C/svg%3E");
+
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  z-index: -1; /* Behind text */
+  pointer-events: none;
+
+  /* Apply the linear wipe animation */
+  /* 0.8s duration, smooth ease-out finish, plays once forward */
+  animation: brushWipe 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-subtitle {
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 3.5rem;
+  font-weight: 300;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+/* --- BUTTONS --- */
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.btn-primary {
+  padding: 16px 48px;
+  font-family: "Inter", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  background-color: #d1ff42;
+  color: #1a2a36;
+  border: 1px solid #d1ff42;
+  box-shadow: 0 4px 20px rgba(209, 255, 66, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background-color: #cbf53f;
+  box-shadow: 0 8px 30px rgba(209, 255, 66, 0.7);
+}
+
+.btn-secondary {
+  padding: 16px 48px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  background: rgba(255, 255, 255, 0.6);
+  color: #1a1a1a;
+  border: 1px solid #e0e0e0;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-secondary:hover {
+  background: #ffffff;
+  border-color: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* --- MOBILE --- */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 3.5rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  /* Mobile adjustments for brush stroke */
+  .brush-underline {
+    height: 30px;
+    bottom: 5px;
+    width: 100%;
+    left: 0;
+  }
+}
+
+/* --- DARK MODE OVERRIDES --- */
+[data-theme="dark"] .hero-container {
+  background-color: #000000;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+  box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 1);
+  animation: gridMove 2s linear infinite;
+}
+
+[data-theme="dark"] .hero-title {
+  color: #ffffff;
+}
+[data-theme="dark"] .hero-subtitle {
+  color: #cccccc;
+}
+[data-theme="dark"] .cursor {
+  color: #d1ff42;
+}
+
+[data-theme="dark"] .btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .btn-primary {
+  box-shadow: 0 4px 25px rgba(209, 255, 66, 0.2);
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  box-shadow: 0 8px 40px rgba(209, 255, 66, 0.4);
+}
