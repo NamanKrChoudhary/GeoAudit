@@ -22,16 +22,22 @@ export const getAllAreas = async (req, res) => {
 
     const [areasRaw, total] = await Promise.all([
       Area.find(filter)
-        .select("areaId areaName summary satelliteImage updatedAt plots.compliance")
+        .select(
+          "areaId areaName summary satelliteImage updatedAt plots.compliance",
+        )
         .skip(skip)
         .limit(limit)
         .sort({ updatedAt: -1 }),
-      Area.countDocuments(filter)
+      Area.countDocuments(filter),
     ]);
 
-    const areas = areasRaw.map(area => {
-      const hasEncroachment = area.plots.some(p => p.compliance.status === "ENCROACHED");
-      const requiresManualReview = area.plots.some(p => p.compliance.requiresManualReview);
+    const areas = areasRaw.map((area) => {
+      const hasEncroachment = area.plots.some(
+        (p) => p.compliance.status === "ENCROACHED",
+      );
+      const requiresManualReview = area.plots.some(
+        (p) => p.compliance.requiresManualReview,
+      );
 
       return {
         areaId: area.areaId,
@@ -39,10 +45,10 @@ export const getAllAreas = async (req, res) => {
         summary: area.summary,
         flags: {
           hasEncroachment,
-          requiresManualReview
+          requiresManualReview,
         },
         lastUpdated: area.updatedAt,
-        previewImage: area.satelliteImage?.imageUrl || null
+        previewImage: area.satelliteImage?.imageUrl || null,
       };
     });
 
@@ -51,7 +57,7 @@ export const getAllAreas = async (req, res) => {
       limit,
       total,
       pages: Math.ceil(total / limit),
-      areas
+      areas,
     });
   } catch (err) {
     console.error("getAllAreas error:", err);
@@ -66,7 +72,7 @@ export const getAreaById = async (req, res) => {
     const area = await Area.findOne({ areaId: req.params.areaId });
     if (!area) return res.status(404).json({ message: "Area not found" });
 
-    const plots = area.plots.map(plot => ({
+    const plots = area.plots.map((plot) => ({
       plotId: plot.plotId,
       plotNumber: plot.plotNumber,
       ownerName: plot.ownerName,
@@ -79,22 +85,21 @@ export const getAreaById = async (req, res) => {
         planned: plot.polygons.planned,
         occupied: plot.polygons.occupied,
         unused: plot.polygons.unused,
-        encroachment: plot.polygons.encroachment
-      }
+        encroachment: plot.polygons.encroachment,
+      },
     }));
 
     res.json({
       areaId: area.areaId,
       areaName: area.areaName,
       summary: area.summary,
-      plots
+      plots,
     });
   } catch (err) {
     console.error("getAreaById error:", err);
     res.status(500).json({ message: err.message });
   }
 };
-
 
 // GET /api/public/stats
 export const getDashboardStats = async (req, res) => {
@@ -107,11 +112,11 @@ export const getDashboardStats = async (req, res) => {
     let areasWithEncroachment = 0;
     let areasWithManualReview = 0;
 
-    areas.forEach(area => {
+    areas.forEach((area) => {
       let hasEncroach = false;
       let hasManual = false;
 
-      area.plots.forEach(plot => {
+      area.plots.forEach((plot) => {
         totalPlots++;
 
         if (plot.compliance.status === "ENCROACHED") {
@@ -138,7 +143,7 @@ export const getDashboardStats = async (req, res) => {
       areasWithManualReview,
       totalPlots,
       encroachedPlots,
-      unusedPlots
+      unusedPlots,
     });
   } catch (err) {
     console.error("getDashboardStats error:", err);
@@ -153,7 +158,7 @@ export const getPlotById = async (req, res) => {
     const area = await Area.findOne({ areaId }).select("areaId areaName plots");
     if (!area) return res.status(404).json({ message: "Area not found" });
 
-    const plot = area.plots.find(p => p.plotId === plotId);
+    const plot = area.plots.find((p) => p.plotId === plotId);
     if (!plot) return res.status(404).json({ message: "Plot not found" });
 
     res.json({
@@ -171,9 +176,9 @@ export const getPlotById = async (req, res) => {
           planned: plot.polygons.planned,
           occupied: plot.polygons.occupied,
           unused: plot.polygons.unused,
-          encroachment: plot.polygons.encroachment
-        }
-      }
+          encroachment: plot.polygons.encroachment,
+        },
+      },
     });
   } catch (err) {
     console.error("getPlotById error:", err);
