@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.model.js"; // Ensure this import exists!
 
-export const protect = (req, res, next) => {
+// ADD THE 'async' KEYWORD HERE
+export const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -11,9 +13,23 @@ export const protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, role }
+
+    // NOW THE 'await' WILL WORK CORRECTLY
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      return res.status(401).json({ message: "User no longer exists" });
+    }
+
+    req.user = user; // Now req.user.email is available for your controller!
     next();
   } catch (err) {
+    console.error("Auth Error:", err.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
+};
+
+// Keep your dummy adminOnly as is
+export const adminOnly = (req, res, next) => {
+  next();
 };
