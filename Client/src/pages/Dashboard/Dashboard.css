@@ -1,0 +1,46 @@
+/* Dashboard.css */
+
+.dashboard-root {
+  /* --- THEME VARIABLES --- */
+  --dash-lime: #d1ff42;
+  --dash-slate-blue: #1e293b;
+  --dash-bg: #050505; /* Deep black for maximum contrast */
+  /* Layout */
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+
+  /* Apply the Slate Blue to the background */
+  background-color: var(--dash-bg);
+  background-image: radial-gradient(
+    circle at center,
+    var(--dash-slate-blue) 0%,
+    var(--dash-bg) 100%
+  );
+
+  color: var(--dash-lime);
+  font-family: "Inter", "JetBrains Mono", monospace;
+}
+
+.content-box {
+  text-align: center;
+  /* Use the Lime variable for a neon glow effect */
+  text-shadow: 0 0 15px rgba(209, 255, 66, 0.5);
+}
+
+.content-box h1 {
+  font-size: 3rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.content-box p {
+  color: #ffffff;
+  opacity: 0.6;
+  letter-spacing: 2px;
+}

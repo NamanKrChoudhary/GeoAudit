@@ -5,6 +5,13 @@ const Product = () => {
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  // NEW: Function to launch the dashboard in a completely new tab
+  const handleLaunch = () => {
+    // "_blank" opens the new tab
+    // "noopener,noreferrer" is a security best practice for new tabs
+    window.open("/dashboard", "_blank", "noopener,noreferrer");
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -32,8 +39,9 @@ const Product = () => {
           Step into the next generation of land management.
         </p>
 
-        <button className="rev-button">
-          Get Started
+        {/* Updated Button to use handleLaunch */}
+        <button className="rev-button" onClick={handleLaunch}>
+          Launch GeoAudit
           <span className="line line-top"></span>
           <span className="line line-right"></span>
           <span className="line line-bottom"></span>

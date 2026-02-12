@@ -1,23 +1,39 @@
 import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import Features from "./components/Features";
-import Product from "./components/Product"; //
-import Steps from "./components/Steps";
-import Team from "./components/Team";
-import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard/Dashboard";
+
+// We create a small helper component to handle the "should I show the navbar?" logic
+const NavigationManager = () => {
+  const location = useLocation();
+
+  // If the URL is exactly "/dashboard", showNavbar will be false
+  const showNavbar = location.pathname !== "/dashboard";
+
+  return (
+    <>
+      {showNavbar && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <Navbar />
-      <Hero />
-      <Features />
-      <Steps />
-      <Product />
-      <Team />
-      <Footer />
-    </div>
+    <Router>
+      <div className="App">
+        <NavigationManager />
+      </div>
+    </Router>
   );
 }
 
