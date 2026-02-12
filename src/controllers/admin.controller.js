@@ -1,52 +1,61 @@
 import Area from "../models/Area.model.js";
 import { callMLApi } from "../services/mlApi.service.js";
+import { uploadToCloud } from "../services/storage.service.js"; // <--- Added this import
 
+// --- 1. SCAN AREA (Updated with Cloudinary) ---
 export const scanArea = async (req, res) => {
   try {
-    const satelliteImage = req.files?.satelliteImage?.[0];
-    const plannedImage = req.files?.plannedImage?.[0];
+    const satelliteFile = req.files?.satelliteImage?.[0];
+    const plannedFile = req.files?.plannedImage?.[0];
 
-    if (!satelliteImage || !plannedImage) {
-      return res.status(400).json({ message: "Both satellite and planned images are required" });
+    if (!satelliteFile || !plannedFile) {
+      return res
+        .status(400)
+        .json({ message: "Both satellite and planned images are required" });
     }
 
-    // Call ML API (currently returns dummy data)
-    const mlResult = await callMLApi(satelliteImage.path, plannedImage.path);
+    // 1. Call ML API (Using local files)
+    const mlResult = await callMLApi(satelliteFile.path, plannedFile.path);
 
     if (!mlResult || !mlResult.areaId) {
-      return res.status(500).json({ message: "ML API did not return valid data" });
+      return res
+        .status(500)
+        .json({ message: "ML API did not return valid data" });
     }
 
-    // Upsert Area with ML results
+    // 2. Upload images to Cloudinary (Storage)
+    // We run these in parallel to save time
+    const [satUpload, planUpload] = await Promise.all([
+      uploadToCloud(satelliteFile.path, "geo-audit/satellite"),
+      uploadToCloud(plannedFile.path, "geo-audit/planned"),
+    ]);
+
+    // 3. Save to DB
     const area = await Area.findOneAndUpdate(
       { areaId: mlResult.areaId },
       {
         areaId: mlResult.areaId,
         areaName: mlResult.areaName || "Unnamed Area",
+
+        // Save the Cloudinary URL, not the local path
         satelliteImage: {
-          imageId: Date.now().toString(),
-          source: "satellite/drone",
+          imageId: satUpload.publicId, // Save ID for deletion later
+          source: "satellite",
           capturedAt: new Date(),
           resolution: "unknown",
-          imageUrl: satelliteImage.filename
+          imageUrl: satUpload.url, // <--- The Cloud URL
         },
+
         plots: mlResult.plots || [],
-        summary: mlResult.summary || {
-          totalPlots: mlResult.plots?.length || 0,
-          compliantPlots: 0,
-          encroachedPlots: 0,
-          partiallyUsedPlots: 0,
-          unusedPlots: 0,
-          lastProcessedAt: new Date()
-        },
-        updatedAt: new Date()
+        summary: mlResult.summary,
+        updatedAt: new Date(),
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
 
     return res.status(200).json({
-      message: "Scan completed successfully (dummy ML data used)",
-      area
+      message: "Scan completed successfully",
+      area,
     });
   } catch (err) {
     console.error("Scan error:", err);
@@ -54,6 +63,7 @@ export const scanArea = async (req, res) => {
   }
 };
 
+// --- 2. DELETE AREA (Kept from original) ---
 export const deleteArea = async (req, res) => {
   try {
     const { areaId } = req.params;
@@ -70,6 +80,7 @@ export const deleteArea = async (req, res) => {
   }
 };
 
+// --- 3. TOGGLE FLAGS (Kept from original) ---
 export const toggleEncroachmentFlag = async (req, res) => {
   try {
     const { areaId, plotId } = req.params;
@@ -78,7 +89,7 @@ export const toggleEncroachmentFlag = async (req, res) => {
     const area = await Area.findOne({ areaId });
     if (!area) return res.status(404).json({ message: "Area not found" });
 
-    const plot = area.plots.find(p => p.plotId === plotId);
+    const plot = area.plots.find((p) => p.plotId === plotId);
     if (!plot) return res.status(404).json({ message: "Plot not found" });
 
     if (typeof requiresManualReview === "boolean") {
@@ -96,7 +107,7 @@ export const toggleEncroachmentFlag = async (req, res) => {
 
     res.json({
       message: "Plot flags updated successfully",
-      plot
+      plot,
     });
   } catch (err) {
     console.error("Toggle flags error:", err);
