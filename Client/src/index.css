@@ -1,0 +1,111 @@
+:root {
+  /* Light Mode (Default) */
+  --bg-color: #ffffff;
+  --text-color: #1a1a1a;
+  --accent-color: #333333;
+
+  /* Fonts */
+  --font-heading: "Cormorant Garamond", serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  /* Dark Mode Overrides */
+  --bg-color: #0a0a0a;
+  --text-color: #f0f0f0;
+  --accent-color: #e0e0e0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-body);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  color: inherit;
+}
+/* Add to src/index.css */
+
+/* 1. Global Color Transition */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    color 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    fill 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    stroke 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 2. Exclude elements that shouldn't transition (like input typing) */
+input,
+textarea {
+  transition:
+    background-color 0.5s,
+    border-color 0.5s,
+    box-shadow 0.5s; /* No color transition on text to prevent lag */
+}
+
+/* 3. The Circular Wipe Animation (View Transitions API) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* 4. Dark Mode Specifics for View Transition */
+[data-theme="dark"]::view-transition-old(root) {
+  z-index: 1;
+}
+[data-theme="dark"]::view-transition-new(root) {
+  z-index: 999;
+}
+
+::view-transition-old(root) {
+  z-index: 999;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+@keyframes moveBackgroundLeft {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -80px 0; /* Match this to your background-size */
+  }
+}
+html {
+  /* This handles the drift animation */
+  scroll-behavior: smooth;
+
+  /* CRITICAL: This ensures that when you scroll to a section, 
+     it stops 100px BEFORE the section so your floating navbar 
+     doesn't overlap the heading. */
+  scroll-padding-top: 100px;
+}

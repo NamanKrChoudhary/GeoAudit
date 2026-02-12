@@ -1,0 +1,12 @@
+The project's name is GeoAudit , which takes two image input - one satellite(real-time) and one political image(initial) and gives what all encroachments , unutilization and unauthorized development is taking place on different components of map. I need to build a website which contains this in the following order :-
+
+Nav Bar( A hamburger button at top left , name at middle , Light/Dark Toggle at right) 
+Hero Section ( Name , A Small description , two buttons - one CTA ( defined later) , other can have whatever you deem suitable enough.
+Features(Scrollable , one by one which basically locks in the whole screen ) 
+Main Product Button( takes to a separate webpage which will have the entire app built upon there) 
+Meet the Devs
+Footer 
+
+My choice of font - Helvetica and Cormorant Garmond. I want the website to be absolutely minimal . 
+
+So can we start - I will give you which section to build next okay . Help me the best you can .

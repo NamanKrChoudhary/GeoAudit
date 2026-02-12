@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.footer-section {
+  width: 100%;
+  padding: 60px 20px;
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(62, 90, 112, 0.1);
+}
+
+.footer-container {
+  text-align: center;
+}
+
+.footer-credit {
+  /* Pixel font with system fallbacks */
+  font-family: "Press Start 2P", "Courier New", Courier, monospace;
+  font-size: 0.75rem; /* Pixel fonts look best small */
+  color: var(--text-color);
+  letter-spacing: 2px;
+  line-height: 2;
+  text-transform: uppercase;
+
+  /* Subtle scanline flicker effect */
+  animation: textFlicker 3s infinite;
+}
+
+.pixel-heart {
+  color: #d1ff42; /* Your signature Lime */
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 1.2rem;
+  /* Glowing Heart */
+  filter: drop-shadow(0 0 8px rgba(209, 255, 66, 0.8));
+  animation: heartBeat 1.5s infinite;
+}
+
+.team-name {
+  color: #d1ff42;
+  text-shadow: 0 0 10px rgba(209, 255, 66, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.team-name:hover {
+  text-shadow: 0 0 20px rgba(209, 255, 66, 1);
+  letter-spacing: 4px; /* Expand on hover */
+}
+
+/* --- ANIMATIONS --- */
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes textFlicker {
+  0% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  94% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Ensure visibility on Dark Mode */
+[data-theme="dark"] .footer-section {
+  background-color: #050505;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .footer-credit {
+  color: rgba(255, 255, 255, 0.6);
+}

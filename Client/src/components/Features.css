@@ -1,0 +1,330 @@
+.features-section {
+  position: relative;
+  padding: 100px 20px;
+  background-color: var(--bg-color); /* Adapts to theme */
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  /* --- DISTINCTION 1: DOT MATRIX PATTERN (Updated) --- */
+  /* Greyer (rgba(0,0,0,0.15)), Bigger (3px radius), More Spaced Out (80px) */
+  background-image: radial-gradient(rgba(0, 0, 0, 0.15) 3px, transparent 3px);
+  background-size: 80px 80px;
+  opacity: 1;
+  animation: moveBackgroundLeft 20s linear infinite;
+}
+
+/* --- DISTINCTION 2: THE THICK LIME DIVIDER LINE (Updated) --- */
+.features-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Thick */
+  height: 8px;
+
+  /* Solid Lime Color */
+  background: #d1ff42;
+
+  /* Strong Lime Glow */
+  box-shadow: 0 4px 20px rgba(209, 255, 66, 0.5);
+  z-index: 10;
+}
+
+/* DARK MODE OVERRIDES for Background & Divider */
+[data-theme="dark"] .features-section {
+  /* Match size (3px), keep white but low opacity for dark mode */
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 3px,
+    transparent 3px
+  );
+  /* background-size inherited */
+}
+
+[data-theme="dark"] .features-section::before {
+  /* Ensure it remains solid lime, maybe slightly stronger glow */
+  background: #d1ff42;
+  box-shadow: 0 4px 30px rgba(209, 255, 66, 0.7);
+}
+
+.features-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.features-header {
+  margin-bottom: 60px;
+  /* CHANGE 1: Center alignment for text */
+  text-align: center;
+
+  /* CHANGE 2: Flexbox centering ensures proper alignment of children */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.features-header h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 4.5rem;
+  line-height: 1.2;
+  color: var(--text-color);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.features-header p {
+  font-family: "Inter", sans-serif;
+  font-size: 1.1rem;
+  color: #777;
+  font-weight: 300;
+  max-width: 600px; /* Slightly wider for better balance */
+
+  /* CHANGE 3: Ensure margins are auto to center the block itself if needed */
+  margin-left: auto;
+  margin-right: auto;
+}
+/* --- BENTO GRID LAYOUT --- */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr; /* 3 Columns */
+  grid-template-rows: 300px 280px; /* 2 Rows */
+  gap: 24px;
+}
+
+/* Specific Card Positions */
+.card-large {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+
+.card-tall {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+}
+
+.card-standard {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.card-standard-2 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* --- CARD INTERNAL STYLING --- */
+.card-inner {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+/* --- ICONS (Slate & Lime Injection) --- */
+.icon-box {
+  /* Default: Slate Blue background/text */
+  color: #3e5a70;
+  background: rgba(62, 90, 112, 0.1);
+
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(62, 90, 112, 0.2);
+}
+
+/* HOVER EFFECT: Icon turns Solid Neon Lime */
+/* Note: We target the parent wrapper hover to trigger the icon change */
+.tilt-wrapper:hover .icon-box {
+  background-color: #d1ff42;
+  color: #1a2a36; /* Dark slate text for contrast */
+  border-color: #d1ff42;
+  box-shadow: 0 0 20px rgba(209, 255, 66, 0.5); /* The Lime Glow */
+  transform: scale(1.1) rotate(-3deg);
+}
+
+/* Dark Mode Icon Defaults */
+[data-theme="dark"] .icon-box {
+  color: #d1ff42; /* Lime Text */
+  background: rgba(209, 255, 66, 0.1); /* Faint Lime BG */
+  border-color: rgba(209, 255, 66, 0.2);
+}
+
+/* --- TYPOGRAPHY --- */
+h3 {
+  font-family: "Inter", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+/* Hovering card turns title Slate Blue */
+.tilt-wrapper:hover h3 {
+  color: #3e5a70;
+}
+
+[data-theme="dark"] .tilt-wrapper:hover h3 {
+  color: #d1ff42; /* Lime in dark mode */
+}
+
+p {
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+[data-theme="dark"] p {
+  color: #aaa;
+}
+
+/* --- MINI GRAPH (Data Line Added) --- */
+.mini-graph {
+  margin-top: auto;
+  height: 80px;
+  width: 100%;
+  position: relative;
+
+  /* The Grid Background */
+  background:
+    linear-gradient(
+      90deg,
+      transparent 49%,
+      rgba(0, 0, 0, 0.05) 50%,
+      transparent 51%
+    ),
+    linear-gradient(rgba(0, 0, 0, 0.05) 50%, transparent 50%);
+  background-size:
+    20px 100%,
+    100% 20px;
+
+  border-radius: 8px;
+  border: 1px solid rgba(62, 90, 112, 0.1); /* Slate Border */
+  overflow: hidden;
+}
+
+/* The Lime Data Line (SVG Overlay) */
+.mini-graph::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+
+  /* A jagged data line SVG in Neon Lime */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 50' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 45 L 20 40 L 40 42 L 60 25 L 80 30 L 100 15 L 120 20 L 140 5 L 160 10 L 180 0 L 200 5' stroke='%23d1ff42' stroke-width='3' vector-effect='non-scaling-stroke' stroke-linejoin='round' stroke-linecap='round'/%3E%3Cpath d='M0 45 L 20 40 L 40 42 L 60 25 L 80 30 L 100 15 L 120 20 L 140 5 L 160 10 L 180 0 L 200 5 V 50 H 0 Z' fill='url(%23grad)' opacity='0.3'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23d1ff42'/%3E%3Cstop offset='1' stop-color='%23d1ff42' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: bottom;
+}
+
+[data-theme="dark"] .mini-graph {
+  background:
+    linear-gradient(
+      90deg,
+      transparent 49%,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent 51%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.05) 50%, transparent 50%);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- CARD HOVER BORDERS --- */
+/* This targets the TiltCard wrapper specifically to add the border accent */
+.tilt-wrapper {
+  /* Existing transition in TiltCard.css, but we add border-color transition here if needed */
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.tilt-wrapper:hover {
+  /* Light Mode: Slate Blue Border */
+  border-color: #3e5a70 !important;
+  box-shadow: 0 15px 40px rgba(62, 90, 112, 0.15) !important;
+}
+
+[data-theme="dark"] .tilt-wrapper:hover {
+  /* Dark Mode: Neon Lime Border */
+  border-color: #d1ff42 !important;
+  box-shadow: 0 15px 40px rgba(209, 255, 66, 0.15) !important;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .card-large,
+  .card-tall,
+  .card-standard,
+  .card-standard-2 {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 300px;
+  }
+}
+/* =========================================
+   SCROLL ANIMATIONS
+   ========================================= */
+
+/* 1. Initial State: Hidden and shifted down */
+.fade-in-pop {
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  /* The browser waits until the class 'is-visible' is added to parent */
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
+}
+
+/* 2. The Animation Keyframes (The "Pop") */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.03); /* Overshoot (Pop!) */
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Settle */
+  }
+}
+
+/* 3. Trigger Logic: Only animate when parent has 'is-visible' class */
+.is-visible .fade-in-pop {
+  animation: popIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 4. Stagger Delays (One by One) */
+.is-visible .delay-0 {
+  animation-delay: 0.1s;
+} /* Header */
+.is-visible .delay-1 {
+  animation-delay: 0.2s;
+} /* Card 1 */
+.is-visible .delay-2 {
+  animation-delay: 0.35s;
+} /* Card 2 */
+.is-visible .delay-3 {
+  animation-delay: 0.5s;
+} /* Card 3 */
+.is-visible .delay-4 {
+  animation-delay: 0.65s;
+} /* Card 4 */

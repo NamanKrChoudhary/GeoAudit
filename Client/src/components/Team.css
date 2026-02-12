@@ -1,0 +1,292 @@
+/* --- SECTION CONTAINER --- */
+.team-section {
+  position: relative;
+  padding: 120px 20px;
+  background-color: var(--bg-color);
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Layered Dot Background (Consistent with Steps/Features) */
+.team-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.15) 3px, transparent 3px);
+  background-size: 80px 80px;
+  z-index: -1;
+  pointer-events: none;
+  animation: moveBackgroundLeft 10s linear infinite;
+}
+
+[data-theme="dark"] .team-section::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 3px,
+    transparent 3px
+  );
+}
+
+.team-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --- HEADER --- */
+.team-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.team-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1;
+  margin-bottom: 15px;
+}
+
+.team-subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 1.2rem;
+  color: #3e5a70;
+  font-weight: 400;
+}
+
+/* --- THE GRID --- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* --- THE TILT CARD WRAPPER --- */
+.team-card-wrapper {
+  height: 600px; /* Forces sexy 9:16 portrait ratio */
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  background: #1a2a36;
+  border: 1px solid rgba(62, 90, 112, 0.1);
+}
+
+.team-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* --- IMAGE BOX --- */
+.team-image-box {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.team-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Start with a moody noir look */
+  filter: grayscale(100%) contrast(1.1);
+  transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.team-item:hover .team-img {
+  filter: grayscale(0%) contrast(1);
+  transform: scale(1.08);
+}
+
+/* Subtle Gradient Overlay */
+.team-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(26, 42, 54, 0.4) 0%,
+    transparent 40%
+  );
+  z-index: 2;
+  transition: background 0.4s ease;
+}
+
+.team-item:hover .team-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(209, 255, 66, 0.1) 0%,
+    transparent 50%
+  );
+}
+
+/* --- INFO PILL (The White Area) --- */
+/* --- UPDATED INFO PILL --- */
+.team-info {
+  position: absolute;
+  bottom: 25px;
+  left: 20px;
+  right: 20px;
+  z-index: 10;
+
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 24px 20px;
+  border-radius: 20px;
+  border-bottom: 5px solid #d1ff42;
+
+  /* CHANGE: Simplified transition to prevent the "disappearing" glitch */
+  transform: translateY(0); /* Start at 0 to avoid calculation jumps */
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+  /* Force hardware acceleration to keep text rendered */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+[data-theme="dark"] .team-info {
+  background: rgba(10, 10, 10, 0.9);
+}
+
+/* --- UPDATED HOVER STATE --- */
+.team-item:hover .team-info {
+  /* Lift instead of jumping from an offset */
+  transform: translateY(-10px);
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(209, 255, 66, 0.25);
+  z-index: 20; /* Ensure it stays on top */
+}
+
+[data-theme="dark"] .team-item:hover .team-info {
+  background: #000000;
+}
+
+/* --- TYPOGRAPHY STABILITY --- */
+.member-name,
+.member-role {
+  /* Prevent text flickering during parent transforms */
+  transform: translateZ(0);
+  transition: color 0.3s ease;
+}
+.member-name {
+  font-family: "Inter", sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #1a2a36;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+[data-theme="dark"] .member-name {
+  color: #ffffff;
+}
+
+.member-role-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lime-line {
+  width: 15px;
+  height: 3px;
+  background-color: #d1ff42;
+  transition: width 0.4s ease;
+  border-radius: 2px;
+}
+
+.team-item:hover .lime-line {
+  width: 35px;
+}
+
+.member-role {
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #3e5a70;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+[data-theme="dark"] .member-role {
+  color: #aabbc9;
+}
+
+/* =========================================
+   SCROLL ENTRANCE ANIMATIONS
+   ========================================= */
+
+.fade-in-pop {
+  opacity: 0;
+  transform: translateY(50px) scale(0.9);
+  visibility: hidden;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+@keyframes teamPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+    visibility: visible;
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+  }
+}
+
+.is-visible .fade-in-pop {
+  animation: teamPopIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* Staggered Delays */
+.is-visible .delay-0 {
+  animation-delay: 0.1s;
+}
+.is-visible .delay-1 {
+  animation-delay: 0.2s;
+}
+.is-visible .delay-2 {
+  animation-delay: 0.35s;
+}
+.is-visible .delay-3 {
+  animation-delay: 0.5s;
+}
+.is-visible .delay-4 {
+  animation-delay: 0.65s;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1200px) {
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+  .team-title {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-card-wrapper {
+    height: 500px;
+  }
+}

@@ -1,0 +1,281 @@
+/* --- SECTION CONTAINER --- */
+.steps-section {
+  position: relative;
+  padding: 140px 0;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* --- LAYER 0: BACKGROUND DOTS --- */
+.steps-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.15) 3px, transparent 3px);
+  background-size: 80px 80px;
+  z-index: -2;
+  animation: moveBackgroundLeft 10s linear infinite;
+}
+
+[data-theme="dark"] .steps-section::after {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 3px,
+    transparent 3px
+  );
+}
+
+/* --- LAYER 1: STATIC LIME PATH --- */
+.steps-svg-path {
+  position: absolute;
+  top: 450px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 700px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.path-solid-lime {
+  stroke: #d1ff42;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(209, 255, 66, 0.5));
+  opacity: 0.5;
+}
+
+/* --- CONTENT CONTAINER --- */
+.steps-container {
+  max-width: 1300px; /* Slightly wider for density */
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 140px;
+  position: relative;
+  z-index: 10;
+}
+
+/* --- HEADER --- */
+.steps-header {
+  text-align: center;
+  margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.steps-main-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.steps-subtitle {
+  font-family: "Inter", sans-serif;
+  font-size: 1.2rem;
+  color: #3e5a70;
+  max-width: 600px;
+  font-weight: 400;
+}
+
+/* --- STEP CARDS --- */
+.step-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 60px;
+  border-radius: 40px;
+  background-color: var(--bg-color);
+  border: 1px solid rgba(62, 90, 112, 0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+  gap: 80px; /* Stronger separation */
+}
+
+[data-theme="dark"] .step-card {
+  background-color: #050505;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.step-card.reverse {
+  flex-direction: row-reverse;
+}
+
+/* --- TEXT CONTENT (60% WIDTH) --- */
+.step-content {
+  flex: 1.6;
+  text-align: left;
+}
+
+.step-number {
+  font-family: "Inter", sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  color: #d1ff42;
+  line-height: 1;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.step-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  line-height: 1.1;
+}
+
+.step-desc {
+  font-family: "Inter", sans-serif;
+  font-size: 1.15rem;
+  color: #3e5a70;
+  line-height: 1.7;
+  margin-bottom: 30px;
+  font-weight: 400;
+}
+
+[data-theme="dark"] .step-desc {
+  color: #aabbc9;
+}
+
+/* Specs List */
+.step-specs {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.step-specs li {
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+[data-theme="dark"] .step-specs li {
+  color: #888;
+}
+
+.lime-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #d1ff42;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* --- IMAGE VISUALS (40% WIDTH) --- */
+.step-visual {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.step-image-container.mini {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4 / 3; /* More technical, compact feel */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 4px solid #d1ff42; /* Slate outline */
+}
+
+[data-theme="dark"] .step-image-container.mini {
+  border-color: #d1ff42;
+}
+
+.step-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.step-card:hover .step-img {
+  transform: scale(1.1);
+}
+
+/* =========================================
+   SCROLL ENTRANCE ANIMATIONS
+   ========================================= */
+
+.fade-in-pop {
+  opacity: 0;
+  transform: translateY(40px) scale(0.95);
+  visibility: hidden;
+}
+
+@keyframes popInSteps {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+    visibility: visible;
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+  }
+}
+
+.is-visible .fade-in-pop {
+  animation: popInSteps 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.is-visible .delay-0 {
+  animation-delay: 0.1s;
+}
+.is-visible .delay-1 {
+  animation-delay: 0.25s;
+}
+.is-visible .delay-2 {
+  animation-delay: 0.4s;
+}
+.is-visible .delay-3 {
+  animation-delay: 0.55s;
+}
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 1100px) {
+  .steps-svg-path {
+    display: none;
+  }
+  .step-card,
+  .step-card.reverse {
+    flex-direction: column;
+    text-align: center;
+    padding: 50px 30px;
+    gap: 40px;
+  }
+  .step-content {
+    text-align: center;
+  }
+  .step-specs li {
+    justify-content: center;
+  }
+  .step-visual {
+    width: 100%;
+  }
+}
