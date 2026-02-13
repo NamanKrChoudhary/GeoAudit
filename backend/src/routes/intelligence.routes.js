@@ -1,25 +1,34 @@
 import express from "express";
-import { getAreaIntelligence } from "../controllers/intelligence.controller.js";
-import { handleAction } from "../controllers/report.controller.js";
-// We only import 'protect' now
+import multer from "multer";
 import { protect } from "../middlewares/auth.middleware.js";
+import {
+  processLandPlan,
+  getAreaIntelligence,
+} from "../controllers/intelligence.controller.js";
+import { handleAction } from "../controllers/report.controller.js";
 
 const router = express.Router();
+const upload = multer({ dest: "uploads/" }); // Temp storage for files
 
-/**
- * @route   GET /api/intelligence/summary/:areaId
- * @desc    Provides 4-layer polygons and metrics
- * @access  Private (Any Logged-in User)
- */
-// REMOVED 'adminOnly'
+// Dashboard Data
 router.get("/summary/:areaId", protect, getAreaIntelligence);
 
-/**
- * @route   POST /api/intelligence/action
- * @desc    Triggers PDF generation and Email dispatch
- * @access  Private (Any Logged-in User)
- */
-// REMOVED 'adminOnly'
+// Report Actions (PDF/Email)
 router.post("/action", protect, handleAction);
+
+/**
+ * @route   POST /api/intelligence/process-plan
+ * @desc    Uploads 2 Images -> Runs 3 ML Models -> Saves Intelligence to DB
+ * @access  Private
+ */
+router.post(
+  "/process-plan",
+  protect,
+  upload.fields([
+    { name: "plotImage", maxCount: 1 }, // The map with lines
+    { name: "satelliteImage", maxCount: 1 }, // The raw satellite photo
+  ]),
+  processLandPlan,
+);
 
 export default router;
